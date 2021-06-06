@@ -1,0 +1,322 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> expression
+Rule 1     expression -> VAR DOT function_chain
+Rule 2     function_chain -> function
+Rule 3     function_chain -> function DOT function_chain
+Rule 4     function -> FUNCTION LPAREN params RPAREN
+Rule 5     params -> param COMMA param
+Rule 6     params -> param
+Rule 7     atom -> STRING
+Rule 8     atom -> NUMBER
+Rule 9     list_elements -> atom
+Rule 10    list_elements -> atom COMMA list_elements
+Rule 11    list_elements -> list_elements COMMA atom
+Rule 12    list -> LBRACKET list_elements RBRACKET
+Rule 13    param -> list
+Rule 14    param -> STRING
+Rule 15    param -> NUMBER
+
+Terminals, with rules where they appear
+
+COMMA                : 5 10 11
+DOT                  : 1 3
+FUNCTION             : 4
+LBRACKET             : 12
+LPAREN               : 4
+NUMBER               : 8 15
+RBRACKET             : 12
+RPAREN               : 4
+STRING               : 7 14
+VAR                  : 1
+error                : 
+
+Nonterminals, with rules where they appear
+
+atom                 : 9 10 11
+expression           : 0
+function             : 2 3
+function_chain       : 1 3
+list                 : 13
+list_elements        : 10 11 12
+param                : 5 5 6
+params               : 4
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . expression
+    (1) expression -> . VAR DOT function_chain
+
+    VAR             shift and go to state 2
+
+    expression                     shift and go to state 1
+
+state 1
+
+    (0) S' -> expression .
+
+
+
+state 2
+
+    (1) expression -> VAR . DOT function_chain
+
+    DOT             shift and go to state 3
+
+
+state 3
+
+    (1) expression -> VAR DOT . function_chain
+    (2) function_chain -> . function
+    (3) function_chain -> . function DOT function_chain
+    (4) function -> . FUNCTION LPAREN params RPAREN
+
+    FUNCTION        shift and go to state 6
+
+    function_chain                 shift and go to state 4
+    function                       shift and go to state 5
+
+state 4
+
+    (1) expression -> VAR DOT function_chain .
+
+    $end            reduce using rule 1 (expression -> VAR DOT function_chain .)
+
+
+state 5
+
+    (2) function_chain -> function .
+    (3) function_chain -> function . DOT function_chain
+
+    $end            reduce using rule 2 (function_chain -> function .)
+    DOT             shift and go to state 7
+
+
+state 6
+
+    (4) function -> FUNCTION . LPAREN params RPAREN
+
+    LPAREN          shift and go to state 8
+
+
+state 7
+
+    (3) function_chain -> function DOT . function_chain
+    (2) function_chain -> . function
+    (3) function_chain -> . function DOT function_chain
+    (4) function -> . FUNCTION LPAREN params RPAREN
+
+    FUNCTION        shift and go to state 6
+
+    function                       shift and go to state 5
+    function_chain                 shift and go to state 9
+
+state 8
+
+    (4) function -> FUNCTION LPAREN . params RPAREN
+    (5) params -> . param COMMA param
+    (6) params -> . param
+    (13) param -> . list
+    (14) param -> . STRING
+    (15) param -> . NUMBER
+    (12) list -> . LBRACKET list_elements RBRACKET
+
+    STRING          shift and go to state 13
+    NUMBER          shift and go to state 14
+    LBRACKET        shift and go to state 15
+
+    params                         shift and go to state 10
+    param                          shift and go to state 11
+    list                           shift and go to state 12
+
+state 9
+
+    (3) function_chain -> function DOT function_chain .
+
+    $end            reduce using rule 3 (function_chain -> function DOT function_chain .)
+
+
+state 10
+
+    (4) function -> FUNCTION LPAREN params . RPAREN
+
+    RPAREN          shift and go to state 16
+
+
+state 11
+
+    (5) params -> param . COMMA param
+    (6) params -> param .
+
+    COMMA           shift and go to state 17
+    RPAREN          reduce using rule 6 (params -> param .)
+
+
+state 12
+
+    (13) param -> list .
+
+    COMMA           reduce using rule 13 (param -> list .)
+    RPAREN          reduce using rule 13 (param -> list .)
+
+
+state 13
+
+    (14) param -> STRING .
+
+    COMMA           reduce using rule 14 (param -> STRING .)
+    RPAREN          reduce using rule 14 (param -> STRING .)
+
+
+state 14
+
+    (15) param -> NUMBER .
+
+    COMMA           reduce using rule 15 (param -> NUMBER .)
+    RPAREN          reduce using rule 15 (param -> NUMBER .)
+
+
+state 15
+
+    (12) list -> LBRACKET . list_elements RBRACKET
+    (9) list_elements -> . atom
+    (10) list_elements -> . atom COMMA list_elements
+    (11) list_elements -> . list_elements COMMA atom
+    (7) atom -> . STRING
+    (8) atom -> . NUMBER
+
+    STRING          shift and go to state 20
+    NUMBER          shift and go to state 21
+
+    list_elements                  shift and go to state 18
+    atom                           shift and go to state 19
+
+state 16
+
+    (4) function -> FUNCTION LPAREN params RPAREN .
+
+    DOT             reduce using rule 4 (function -> FUNCTION LPAREN params RPAREN .)
+    $end            reduce using rule 4 (function -> FUNCTION LPAREN params RPAREN .)
+
+
+state 17
+
+    (5) params -> param COMMA . param
+    (13) param -> . list
+    (14) param -> . STRING
+    (15) param -> . NUMBER
+    (12) list -> . LBRACKET list_elements RBRACKET
+
+    STRING          shift and go to state 13
+    NUMBER          shift and go to state 14
+    LBRACKET        shift and go to state 15
+
+    param                          shift and go to state 22
+    list                           shift and go to state 12
+
+state 18
+
+    (12) list -> LBRACKET list_elements . RBRACKET
+    (11) list_elements -> list_elements . COMMA atom
+
+    RBRACKET        shift and go to state 23
+    COMMA           shift and go to state 24
+
+
+state 19
+
+    (9) list_elements -> atom .
+    (10) list_elements -> atom . COMMA list_elements
+
+  ! shift/reduce conflict for COMMA resolved as shift
+    RBRACKET        reduce using rule 9 (list_elements -> atom .)
+    COMMA           shift and go to state 25
+
+  ! COMMA           [ reduce using rule 9 (list_elements -> atom .) ]
+
+
+state 20
+
+    (7) atom -> STRING .
+
+    COMMA           reduce using rule 7 (atom -> STRING .)
+    RBRACKET        reduce using rule 7 (atom -> STRING .)
+
+
+state 21
+
+    (8) atom -> NUMBER .
+
+    COMMA           reduce using rule 8 (atom -> NUMBER .)
+    RBRACKET        reduce using rule 8 (atom -> NUMBER .)
+
+
+state 22
+
+    (5) params -> param COMMA param .
+
+    RPAREN          reduce using rule 5 (params -> param COMMA param .)
+
+
+state 23
+
+    (12) list -> LBRACKET list_elements RBRACKET .
+
+    COMMA           reduce using rule 12 (list -> LBRACKET list_elements RBRACKET .)
+    RPAREN          reduce using rule 12 (list -> LBRACKET list_elements RBRACKET .)
+
+
+state 24
+
+    (11) list_elements -> list_elements COMMA . atom
+    (7) atom -> . STRING
+    (8) atom -> . NUMBER
+
+    STRING          shift and go to state 20
+    NUMBER          shift and go to state 21
+
+    atom                           shift and go to state 26
+
+state 25
+
+    (10) list_elements -> atom COMMA . list_elements
+    (9) list_elements -> . atom
+    (10) list_elements -> . atom COMMA list_elements
+    (11) list_elements -> . list_elements COMMA atom
+    (7) atom -> . STRING
+    (8) atom -> . NUMBER
+
+    STRING          shift and go to state 20
+    NUMBER          shift and go to state 21
+
+    atom                           shift and go to state 19
+    list_elements                  shift and go to state 27
+
+state 26
+
+    (11) list_elements -> list_elements COMMA atom .
+
+    RBRACKET        reduce using rule 11 (list_elements -> list_elements COMMA atom .)
+    COMMA           reduce using rule 11 (list_elements -> list_elements COMMA atom .)
+
+
+state 27
+
+    (10) list_elements -> atom COMMA list_elements .
+    (11) list_elements -> list_elements . COMMA atom
+
+  ! shift/reduce conflict for COMMA resolved as shift
+    RBRACKET        reduce using rule 10 (list_elements -> atom COMMA list_elements .)
+    COMMA           shift and go to state 24
+
+  ! COMMA           [ reduce using rule 10 (list_elements -> atom COMMA list_elements .) ]
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for COMMA in state 19 resolved as shift
+WARNING: shift/reduce conflict for COMMA in state 27 resolved as shift
